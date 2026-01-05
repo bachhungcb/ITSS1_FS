@@ -30,7 +30,6 @@ services:
       - app-network
     environment:
       - ASPNETCORE_HTTP_PORTS=80
-      - ConnectionStrings__DefaultConnection=${DB_CONNECTION_STRING}
     restart: always
 
   # --- Frontend Service ---
