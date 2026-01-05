@@ -8,11 +8,11 @@ services:
       dockerfile: Api/Dockerfile
     container_name: itss_backend
     ports:
-      - "8018:80" # Thay đổi port tùy theo framework BE của bạn
+      - "8018:8080" # Thay đổi port tùy theo framework BE của bạn
     networks:
       - app-network
     environment:
-      - ASPNETCORE_HTTP_PORTS=80
+      - ASPNETCORE_HTTP_PORTS=8080
     restart: always
 
   # Service cho Frontend
