@@ -8,7 +8,7 @@ services:
       dockerfile: Api/Dockerfile
     container_name: itss_backend
     ports:
-      - "8018:8000" # Thay đổi port tùy theo framework BE của bạn
+      - "8018:80" # Thay đổi port tùy theo framework BE của bạn
     networks:
       - app-network
     environment:
