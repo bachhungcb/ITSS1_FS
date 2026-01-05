@@ -1,0 +1,6 @@
+[submodule "ITSS_FE"]
+	path = ITSS_FE
+	url = https://github.com/PhucAnh0502/ITSS1.git
+[submodule "ITSS_BE"]
+	path = ITSS_BE
+	url = https://github.com/bachhungcb/ITSS_BE.git
