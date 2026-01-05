@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  # Service cho Backend
+  backend:
+    build:
+      context: ./ITSS_BE # Đường dẫn tới source code BE
+      dockerfile: Api/Dockerfile
+    container_name: itss_backend
+    ports:
+      - "8018:8000" # Thay đổi port tùy theo framework BE của bạn
+    networks:
+      - app-network
+    environment:
+      - ASPNETCORE_HTTP_PORTS=80
+    restart: always
+
+  # Service cho Frontend
+  frontend:
+    build:
+      context: ./ITSS_FE # Đường dẫn tới source code FE
+      dockerfile: Dockerfile
+    container_name: itss_frontend
+    ports:
+      - "3636:80" # Thay đổi port tùy theo framework FE (React/Vue/Angular)
+    networks:
+      - app-network
+    depends_on:
+      - backend
+    restart: always
+
+# Định nghĩa mạng để cô lập các container (Network Isolation)
+networks:
+  app-network:
+    driver: bridge
