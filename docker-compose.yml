@@ -20,6 +20,8 @@ services:
     build:
       context: ./ITSS_FE # Đường dẫn tới source code FE
       dockerfile: Dockerfile
+      args:
+        VITE_BASE_API_URL: http://localhost:8018/api/v1
     container_name: itss_frontend
     ports:
       - "3636:80" # Thay đổi port tùy theo framework FE (React/Vue/Angular)
