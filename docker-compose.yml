@@ -1,37 +1,53 @@
 version: '3.8'
 
 services:
-  # Service cho Backend
+  # --- Gateway Service (Mới) ---
+  gateway:
+    image: nginx:1.25-alpine
+    container_name: itss_gateway
+    ports:
+      - "3636:443" # Port HTTPS chuẩn
+      - "3618:80"   # Port HTTP (để redirect)
+    volumes:
+      - ./nginx-gateway.conf:/etc/nginx/conf.d/default.conf
+      - ./certs:/etc/nginx/certs
+    networks:
+      - app-network
+    depends_on:
+      - frontend
+      - backend
+
+  # --- Backend Service ---
   backend:
     build:
-      context: ./ITSS_BE # Đường dẫn tới source code BE
+      context: ./ITSS_BE
       dockerfile: Api/Dockerfile
     container_name: itss_backend
-    ports:
-      - "8018:8080" # Thay đổi port tùy theo framework BE của bạn
+    # BỎ mapping ports cũ đi để bảo mật
+    expose:
+      - "80" # Chỉ mở port 80 cho các container khác trong mạng nội bộ
     networks:
       - app-network
     environment:
-      - ASPNETCORE_HTTP_PORTS=8080
+      - ASPNETCORE_HTTP_PORTS=80
+      - ConnectionStrings__DefaultConnection=${DB_CONNECTION_STRING}
     restart: always
 
-  # Service cho Frontend
+  # --- Frontend Service ---
   frontend:
     build:
-      context: ./ITSS_FE # Đường dẫn tới source code FE
+      context: ./ITSS_FE
       dockerfile: Dockerfile
-      args:
-        VITE_BASE_API_URL: http://localhost:8018/api/v1
     container_name: itss_frontend
-    ports:
-      - "3636:80" # Thay đổi port tùy theo framework FE (React/Vue/Angular)
+    # BỎ mapping ports cũ (3636:80)
+    expose:
+      - "80"
     networks:
       - app-network
     depends_on:
       - backend
     restart: always
 
-# Định nghĩa mạng để cô lập các container (Network Isolation)
 networks:
   app-network:
     driver: bridge
